@@ -1,0 +1,328 @@
+
+\section{Motor Speed Control}
+The system employs a cascaded Proportional-Integral-Derivative (PID) control loop to achieve real-time balance and motion control of the robot. This control architecture ensures stability by continuously monitoring and adjusting the robot's state using feedback from multiple sensors \cite{jamil_modeling_2014}. Key inputs to the control loop include:
+the robot's pitch angle, gyroscope data, and motor encoder values, which provide critical information on orientation, angular velocities, and position. 
+\begin{itemize}
+	\item \textbf{Pitch angle}: Provides information about the robot's tilt relative to the vertical axis.
+	\item \textbf{Gyroscope data}: Supplies angular velocity measurements for dynamic stabilization.
+	\item \textbf{Motor encoder values}: Tracks wheel position and velocity for precise motion control.
+\end{itemize}
+
+The control algorithm computes outputs for \textbf{pitch}, \textbf{yaw}, and \textbf{position} at regular intervals, generating \textbf{pulse-width-modulation (PWM)} signals to adjust motor speeds via the motor driver (see Fig. \ref{fig:control-loop-block-diagram}). To prioritize system stability, the pitch angle is updated at a higher frequency (e.g., every control cycle), while the yaw angle and position control outputs are updated less frequently (e.g., every 8th cycle). This hierarchical approach ensures efficient resource utilization and robust performance.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{assets/control-loop-block-diagram}
+	\caption{Robot's control block diagram.}
+	\label{fig:control-loop-block-diagram}
+\end{figure}
+\subsubsection{Motor Driver}
+The TB6612FNG dual motor driver (shown in Fig. \ref{fig:tb6612fng}) allows independent control of two DC motors. It uses a MOSFET H-bridge for bidirectional and Pulse Width Modulation (PWM) based motor speed control. Fig. \ref{fig:tb6612fng_plot} shows that each channel of the TB6612FNG can deliver up to 0.85A of current continuously. Furthermore, it consists of integrated over-current protection and thermal shutdown features for enhance reliability \cite{TB6612FNG}.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[TB6612FNG \cite{TB6612FNG_photo}.]{
+		\includegraphics[height=3cm]{assets/TB6612FNG.jpg}
+		\label{fig:tb6612fng}
+	}\\ % Line break to stack the subfigures vertically
+	\subfloat[Target characteristics for TB6612FNG \cite{TB6612FNG}.]{
+		\includegraphics[height=6cm]{assets/TB6612FNG_target_characteristics}
+		\label{fig:tb6612fng_plot}
+	}
+	\label{fig:tb6612fng_and_tb6612fng_plot}
+	\caption{}
+\end{figure}
+
+Instead of using two separate MCU pins for direction control, a single pin can be used with an inverted Schmitt trigger to generate the complementary signal automatically. For this purspose SN74LVC2G14 (shown in Fig. \ref{fig:SN74LVC2G14}) is used. It also enhances motor control by improving signal stability (similar to what is shown in Fig. \ref{fig:schmitt_trigger_hysteresis}).  
+\begin{figure}[H]
+	\centering
+	\subfloat[SN74LVC2G14 \cite{SN74LVC2G14}.]{
+		\includegraphics[height=2cm]{assets/SN74LVC2G14.png}
+		\label{fig:SN74LVC2G14}
+	}\\ % Line break to stack the subfigures vertically
+	\subfloat[Schmitt trigger output without hysteresis (left) and with hysteresis (right) \cite{schmitt_trigger_hysteresis}.]{
+		\includegraphics[height=4cm]{assets/schmitt_trigger_hysteresis.png}
+		\label{fig:schmitt_trigger_hysteresis}
+	}
+	\label{fig:SN74LVC2G14_and_schmitt_trigger_hysteresis}	
+	\caption{}
+\end{figure}
+
+\subsubsection{Drive Motors}
+The drive system employs NNHYTECH GA37 520 DC motors (37mm diameter, 12V, 360 RPM) equipped with Hall effect encoders (shown in Fig. \ref{fig:dc-motor}) \cite{dc_motor}. These motors feature a reduction gearbox, which enhances torque output while maintaining controlled rotational speed, making them well-suited for applications requiring precise motion control. The Hall effect encoders generate quadrature signals, enabling accurate measurement of speed and position. Motors from NHYTech were in this case.
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=4cm]{assets/dc-motor-with-encoder.jpg}
+	\caption{Similar construction motors were used in this project \cite{dc_motor}.}
+	\label{fig:dc-motor}
+\end{figure}
+
+\subsection{Hierarchical Control Strategy}
+To optimize system performance and resource utilization, the control loop employs a hierarchical update strategy:
+\begin{itemize}
+	\item \textbf{Pitch Control}: Updated at the highest frequency (e.g., every control cycle) to ensure rapid response to changes in the robot's tilt and maintain balance.
+	\item \textbf{Yaw and Position Control}: Updated at a lower frequency (e.g., every 8th cycle) to reduce computational load while still providing adequate motion control.
+\end{itemize}
+
+This approach prioritizes critical tasks (e.g., maintaining balance) while efficiently managing system resources, ensuring robust and stable operation.
+
+
+\subsection{Basic PID Structure}
+The PID controller generates a control signal $u(t)$ based on the error signal $e(t)$, which is the difference between the desired setpoint and the measured process variable (see Fig. \ref{fig:control-loop-block-diagram}). The control signal is computed as:
+
+\begin{equation}
+	u(t) = K_p e(t) + K_i \int_0^t e(\tau)d\tau + K_d \frac{d}{dt}e(t)
+\end{equation}
+
+Where:
+\begin{itemize}
+	\item $u(t)$: Control signal applied to the system.
+	\item $e(t)$: Error signal, representing the deviation from the setpoint.
+	\item $K_p$: Proportional gain, which responds to the current error.
+	\item $K_i$: Integral gain, which addresses accumulated past errors.
+	\item $K_d$: Derivative gain, which predicts future error trends based on the rate of change.
+\end{itemize}
+
+\subsection{Discrete Time Implementation}
+For digital implementation, the continuous-time PID equation is discretized to suit microcontroller-based systems. The discrete-time PID control signal u[n]u[n] is calculated as:
+
+\begin{equation}
+	u[n] = K_p e[n] + K_i T_s \sum_{k=0}^n e[k] + K_d \frac{e[n] - e[n-1]}{T_s}
+\end{equation}
+
+where:
+\begin{itemize}
+ \item $T_s$: Sampling period, representing the time interval between consecutive control updates.
+ \item $e[n]$: Error signal at the nn-th sampling instant.
+ \item $u[n]$: Control signal at the nn-th sampling instant.
+\end{itemize}
+This formulation ensures compatibility with real-time embedded systems while maintaining control precision.
+
+
+\subsubsection{Power Supply considerations}
+The custom-designed battery box (shown in Fig.~\ref{fig:battery}) provides a portable and rechargeable power solution for the Elegoo robot~\cite{battery}. It houses two 18650 LiPo batteries, likely connected in series, to deliver a regulated voltage suitable for powering the robot’s components. An integrated Battery Management System (BMS) ensures safe operation by protecting against overcharge, over-discharge, over-current, and short circuits. A power switch enables complete disconnection, while a USB charging port and status indicator LED facilitate easy recharging and monitoring.  
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=6cm]{assets/Battery.png}
+	\caption{ELEGOO battery pack with charger.}
+	\label{fig:battery}
+\end{figure}
+
+To monitor battery voltage, the Arduino Nano employs a voltage divider circuit, scaling the battery voltage to a safe range for its analog-to-digital converter (ADC). The divider consists of two resistors in series, and the output voltage is given by:  
+\begin{equation}  
+	V_{\text{out}} = V_{\text{battery}} \times \frac{R_2}{R_1 + R_2}  
+\end{equation}  
+
+where \( V_{\text{out}} \) is the scaled-down voltage read by the Arduino’s ADC, and \( R_1 \) and \( R_2 \) are the resistor values chosen to ensure the measured voltage remains within the 0–5V range.  
+
+\begin{figure}[H]  
+	\centering  
+	\includegraphics[height=1cm]{assets/voltage-divider.png}  
+	\caption{Voltage divider circuit used for in the robot \cite{tumbller}.}  
+	\label{fig:voltage-divider}  
+\end{figure}
+
+The A2 pin is used for measurement, and the internal reference voltage is set to 1.1V, ensuring stable readings independent of supply voltage fluctuations. However, since 1.1V is too low to directly measure the battery voltage, a resistor divider is implemented. A 10k\(\Omega\) (R1) and 1.5k\(\Omega\) (R2) resistor pair (schematic shown in Fig.~\ref{fig:schematics_control-loop}) is used, forming a 1/11 voltage division ratio:
+\begin{equation}  
+	V_{\text{out}} = V_{\text{battery}} \times \frac{1.5}{10 + 1.5} = V_{\text{battery}} \times 0.136  
+\end{equation}  
+
+For a fully charged 8.4V LiPo battery, the resulting $ V_{\text{out}} \approx $ 1.14 V, which is safely within the 1.1 V reference range but may introduce minor ADC saturation at peak voltage.
+
+The following function reads the battery voltage using the voltage divider and determines the battery status:
+\begin{lstlisting}[style=cppstyle2]
+void Voltage_Measure()
+{
+	if (millis() - vol_measure_time > 1000) //Measured every 1000 milliseconds
+	{
+		vol_measure_time = millis();
+		double voltage = (analogRead(VOL_MEASURE_PIN) * 1.1 / 1024) * ((10 + 1.5) / 1.5); //Read voltage value
+		Serial.print("Current voltage value : ");
+		Serial.println(voltage);
+		if(voltage>7.8)
+		Serial.println("The battery is fully charged");
+		else
+		Serial.println("Low battery");
+	}
+}
+\end{lstlisting}
+
+
+\subsection{Tuning Methodology}
+The Ziegler-Nichols method is a widely used and systematic approach for tuning PID controllers. It provides a reliable framework for determining initial controller parameters, which can then be fine-tuned for optimal performance. The method involves inducing controlled oscillations in the system to identify critical parameters, which are then used to calculate the proportional, integral, and derivative gains.
+\subsubsection{Ziegler-Nichols Method}
+The Ziegler-Nichols tuning procedure consists of the following steps:
+\begin{enumerate}
+	\item \textbf{Initialize Parameters}: Set the integral gain \( K_i \) and derivative gain \( K_d \)to zero, leaving only the proportional gain \( K_p \) active.
+	\item \textbf{Induce Oscillations}: Gradually increase \( K_p \) until the system exhibits sustained oscillations. At this point, the system is at the threshold of stability, and the proportional gain is referred to as the ultimate gain \( K_u \). The period of these oscillations is denoted as \( T_u \).
+	\item \textbf{Record Critical Values}: Note the values of \( K_u \) and \( T_u \), as they are essential for calculating the final PID parameters.
+	\item \textbf{Calculate PID Gains:} Using the recorded values, compute the PID parameters as follows:
+	\begin{equation}
+	\begin{aligned}
+		K_p &= 0.6K_u \\
+		T_i &= 0.5T_u \\
+		T_d &= 0.125T_u  \label{eq:eq}
+	\end{aligned}
+	\end{equation}
+	Here, \( T_i \) and \( T_d \) represent the integral and derivative time constants, respectively. These values are then used to determine the integral and derivative gains:
+	\begin{equation}
+	\begin{aligned}
+	K_i = \frac{K_p}{T_i} \quad \text{and} \quad K_d = K_p \cdot T_d.  \label{eq:eq}
+	\end{aligned}
+	\end{equation}
+\end{enumerate}
+	
+This method provides a robust starting point for achieving stable control. However, it is important to note that the Ziegler-Nichols method may require additional fine-tuning to account for system-specific dynamics and performance requirements. The calculated parameters serve as an initial baseline, which can be further optimized through iterative testing and adjustment.
+
+
+\subsubsection{Practical Tuning Guidelines}
+In addition to the Ziegler-Nichols method, practical tuning guidelines were applied to refine the controller performance:
+
+\begin{itemize}
+	\item Start with a small proportional gain $K_p$ (e.g. $K_p$ = 10) to avoid instability.
+	\item Introduce the derivative term $K_d$ to dampen oscillations, typically setting $K_d = 0.1K_p$.
+	\item  Fine-tune $K_p$, $K_i$, and $K_d$ iteratively to achieve optimal stability and responsiveness.
+\end{itemize}
+
+
+\subsection{Pitch PID Control:}
+The pitch control loop ensures the robot maintains its upright position. The primary objective of the pitch controller is to minimize the deviation of the robot's pitch angle from a set-point, which is ideally zero degrees (i.e., upright). The pitch control output is calculated using the PD algorithm, where the error is the difference between the current pitch angle and the desired pitch angle. 
+\begin{equation}
+	\tau_{\theta,pid} = K_{p\theta}({\theta_{desired} - \theta_{measured}}) + K_{d\theta}\frac{d}{dt}(\theta_{desired} - \theta_{measured})
+\end{equation}
+
+Below is its code implementation:
+\begin{lstlisting}[style=cppstyle2]
+inline void runPitchControl() {
+	pitch_pid_output = (kp_balance * (kalman.angle - 0)) + (kd_balance * gyro_x);
+}
+\end{lstlisting}
+
+The final results are shown in Fig.~\ref{fig:pid_position_kp_55_kd_1_25}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/pid_pitch_kp_55_kd_1_25.png}
+	\caption{Pitch angle control system response at $K_{p\theta}$ = 55 and $K_{d\theta}$ = 1.25. The data was recorded at baud rate of 115200.}
+	\label{fig:pid_position_kp_55_kd_1_25}
+\end{figure}
+
+\subsection{Eliminating Jitter}
+Once the system reaches stability, it begins to exhibit jitter, as observed in the PID output between data points 250 and 400 in Fig.~\ref{fig:pid_position_kp_55_kd_1_25}. This jitter arises due to the high sensitivity of the derivative gain ($K_{d\theta}$) to fluctuations in the gyroscope readings ($\dot{\theta}$). While reducing $K_{d\theta}$ mitigates the jitter, it also diminishes the system's ability to dampen oscillations, leading to excessive overshoot and potential instability. Fig.~\ref{fig:pid_position_overshoot} illustrates the system's response when using $K_{p\theta}$ = 55 and $K_{d\theta}$ = 0.75 where significant overshoot is evident.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/pid_pitch_overshoot.png}
+	\caption{Pitch angle control system response at $K_{p\theta}$ = 55 and $K_{d\theta}$ = 0.75. Data recorded at baud rate of 115200.}
+	\label{fig:pid_position_overshoot}
+\end{figure}
+
+To address this issue, an \textbf{adaptive derivative gain approach} is implemented, where $K_{d\theta}$ is adjusted dynamically based on the pitch angle of the robot. When the absolute pitch angle exceeds a predefined threshold, a higher derivative gain is used to provide stronger correction, while a lower gain is applied for small angles to minimize jitter. The corresponding implementation is as follows:
+\begin{lstlisting}[style=cppstyle2]
+if (pitch_angle > 8) { kd_balance = kd_balance_large_angle; }
+else { kd_balance = kd_balance_small_angle; }
+
+inline void runPitchControl() {
+	pitch_pid_output = (kp_balance * (kalman.angle - 0)) + (kd_balance * gyro_x);
+}
+\end{lstlisting}
+
+This adaptive control strategy effectively stabilizes the system while reducing excessive oscillations. Fig.~\ref{fig:pid_position_combined} presents the improved system response, demonstrating a smoother transition and enhanced overall stability.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/pid_pitch_combined.png}
+	\caption{Pitch angle control system response. The data was recorded at baud rate of 115200.}
+	\label{fig:pid_position_combined}
+\end{figure}
+
+
+\subsection{Yaw Control:}
+Yaw control is responsible for controlling the robot's rotational movement around its vertical axis. The yaw PID controller computes the control output based on the robot's angular velocity, which is measured by the gyroscope along the z-axis. 
+\begin{equation}
+	\tau_{\phi,pid} = K_{p\phi}(\phi_{desired} - \phi_{measured}) + K_{d\phi}\frac{d}{dt}(\phi_{desired} - \phi_{measured})
+\end{equation}
+
+Below is its code implementation:
+\begin{lstlisting}[style=cppstyle2]
+inline void runYawControl(){
+	float delta_yaw_angle = yaw_angle_degrees - desired_yaw_angle;
+	yaw_pid_output = (kp_turn * delta_yaw_angle) + (kd_turn * gyro_z);
+}
+\end{lstlisting}
+
+The yaw control adjusts the motor speeds to achieve the desired angle, ensuring the robot maintains a stable heading. Fig.~\ref{fig:pid_yaw} illustrates the system's response with \(K_{p\phi}\) = 2.5 and $K_{i\phi}$ = 0.5 when transitioning from an initial angle of $-20 \ deg$ to final angle of $+20 \ deg$.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/pid_yaw_kp_2_5_kd_0_5_target_20_deg.png}
+	\caption{Yaw angle control system response at \(K_p\) = 2.5 and $K_i$ = 0.5 for an angle transition from $-20 \ deg$ to $+20 \ deg$. The data was recorded at baud rate of 115200.}
+	\label{fig:pid_yaw}
+\end{figure}
+
+\subsection{Position Control:}
+Position control is implemented to ensure the robot moves smoothly and accurately along a path or to a target location. The encoder feedback from the left and right wheels is used to calculate the robot's displacement and speed. The position PID controller adjusts the motor speeds to minimize the error in position and velocity.
+\begin{equation}
+	\tau_{x,pid} = K_{px}(x_{desired} - x_{measured}) + K_{dx}\frac{d}{dt}(x_{desired} - x_{measured})
+\end{equation}
+
+Below is its code implementation:
+\begin{lstlisting}[style=cppstyle2]
+inline void runPositionControl(){
+	position_pid_output = - (kp_position * (current_position - move_to_position)) - (kd_position * encoder_speed_filtered);
+}
+\end{lstlisting}
+
+The position controller continuously adjusts motor speeds to reduce position error while maintaining a stable heading. Fig.~\ref{fig:pid_postition} presents the system's response when \(K_{px}\) = 0.26 and $K_{dx}$ = 20 when moving from relative distance of $-20 \ cm$ to $+20 \ cm$.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/pid_position_kp_0_26_kd_20.png}
+	\caption{Position control system response with \(K_{px}\) = 0.26 and $K_{dx}$ = 20 for a displacement of $-20 \ cm$ to $+20 \ cm$. Data recorded at baud rate of 115200.}
+	\label{fig:pid_postition}
+\end{figure}
+
+
+\subsection{Combining Control Outputs}
+The final motor control is achieved by combining the outputs from all three PID controllers. The outputs from the pitch, yaw, and position PID controllers are used to calculate the motor speeds, which determine the robot's motion. Specifically, the following equation is used to compute the PWM values for the left and right motors:
+
+\begin{align}
+	\tau_{left,motor} &= \tau_{\theta,pid} - \tau_{\phi,pid} - \tau_{x,pid} \\
+	\tau_{right,motor} &= \tau_{\theta,pid} + \tau_{\phi,pid} - \tau_{x,pid}
+\end{align}
+
+Below is its code implementation:
+\begin{lstlisting}[style=cppstyle2]
+void balance(){
+...
+			
+	pwm_left = pitch_pid_output - yaw_pid_output - position_pid_output;
+	pwm_right = pitch_pid_output + yaw_pid_output - position_pid_output;
+
+...
+}
+\end{lstlisting}
+
+The computed Pulse-Width-Modulation (PWM) are transmitted to the motor drivers, which adjust the robot's movement and balance in real time. This closed-loop control mechanism ensures precise and stable operation by continuously refining motor outputs based on sensor feedback. A simplified diagram of the motor control loop is illustrated in Fig.~\ref{fig:schematics_control-loop}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=8cm]{assets/pitch_angle_control_loop.png}
+	\caption{A simplified diagram of the motor control loop \cite{10193276}.}
+	\label{fig:schematics_control-loop}
+\end{figure}
+
+
+\subsection{Results}
+The use of PID controllers for pitch, yaw, and position control enables the robot to maintain balance and navigate effectively (see Fig. \ref{fig:control-loop-2}). The proportional, integral, and derivative terms in each PID loop allow the system to respond to real-time errors, minimize steady-state deviations, and anticipate future errors, leading to smooth and precise control of the robot's motion. The integration of these PID controllers is fundamental to the robot's stability and performance. Final results are shown in Fig.~\ref{fig:final_pid}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{assets/final_pid.png}
+	\caption{The final control system individual output values recorded at baud rate of 115200.}
+	\label{fig:final_pid}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{assets/control_loop_diagram.png}
+	\caption{A simplified block diagram of the cascaded control loop used. }
+	\label{fig:control-loop-2}
+\end{figure}

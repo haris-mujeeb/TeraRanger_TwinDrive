@@ -1,0 +1,120 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2.5cm,bottom=2.5cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx} % Required for including images
+\usepackage{cite}     % Required for handling citations
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\RequirePackage{subfig} % current version of subfigures:
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{fancyhdr}
+\usepackage{float}
+\RequirePackage{numprint}				% styling of numbers
+
+
+\usepackage{multirow}
+
+% Define colors for syntax highlighting
+\definecolor{keywordcolor}{RGB}{0,0,255}
+\definecolor{commentcolor}{RGB}{0,128,0}
+\definecolor{stringcolor}{RGB}{255,0,0}
+
+% Set the style for C++ code
+\lstdefinestyle{cppstyle}{
+	language=C++,
+	keywordstyle=\color{keywordcolor},
+	commentstyle=\color{commentcolor},
+	stringstyle=\color{stringcolor},
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=5pt,
+	frame=single,
+	tabsize=4,
+	breaklines=true
+}
+
+
+% Define code style
+\lstdefinestyle{cppstyle2}{
+  language=C++,
+  basicstyle=\scriptsize,
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  commentstyle=\color{orange}\ttfamily,  
+%  basicstyle=\ttfamily\footnotesize,
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{green!50!black},
+%  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny, 
+  stepnumber=1,
+  breaklines=true,
+  backgroundcolor=\color{gray!10},
+  frame=single
+}
+
+
+\titlepageAbschluss	{<<TITLE OF THESIS>>}% title
+{<<MY NAME>>}% Author
+{<<THE DATE>>}% date
+{<<MATRICULATION NUMBER>>}%  matr. nr.
+{Prof. Dr.-Ing. Dr. h.c. Hubert Roth}% 1st examiner
+{M.Sc. <<SUPERVISOR>>}% 2nd examiner
+{Bachelorarbeit/Studienarbeit/Masterarbeit}% doc type
+
+
+\title{Self Balancing Robot}
+\author{Muhammad Haris Mujeeb}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report details the design and implementation of a two-wheeled self-balancing robot, a system that embodies the classic inverted pendulum challenge. The robot employs an MPU6050 inertial measurement unit (IMU) for precise state estimation, with sensor data fusion accomplished using a Kalman filter. A Proportional-Integral-Derivative (PID) control algorithm is implemented to ensure robust balance and stability. The system is designed to support remote monitoring and control, broadening its applicability across diverse scenarios. The firmware for the Arduino Nano was developed using \href{https://platformio.org/}{PlatformIO}, and the full project, including source code and comprehensive documentation, is accessible in this \href{https://github.com/haris-mujeeb/Self-Balancing-Robot}{GitHub repository}.
+\end{abstract}
+
+\thispagestyle{empty}
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+
+\include{introduction.tex}
+\include{modelling.tex}
+\include{firmware_overview.tex}
+\include{sensor_fusion.tex}
+\include{kalman_filter.tex}
+\include{pid.tex}
+\include{obstacle_avoidance.tex}
+\include{serial_communication_debugging.tex}
+
+%\include{simulation_and_testing.tex}
+%\include{power_management.tex}
+\include{user_interface.tex}
+\include{safety_features.tex}
+\include{future_work_and_improvements.tex}
+%\include{real_world_applications.tex}
+%\include{challenges_and_limitations.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references.bib}
+
+\end{document}

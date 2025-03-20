@@ -1,0 +1,227 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Motor Speed Control}{24}{section.191}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Robot's control block diagram.}}{24}{figure.caption.192}\protected@file@percent }
+\newlabel{fig:control-loop-block-diagram}{{12}{24}{Robot's control block diagram}{figure.caption.192}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.1}Motor Driver}{24}{subsubsection.193}\protected@file@percent }
+\newlabel{fig:tb6612fng}{{13a}{25}{Subfigure 13a}{subfigure.195}{}}
+\newlabel{sub@fig:tb6612fng}{{(a)}{a}{Subfigure 13a\relax }{subfigure.195}{}}
+\newlabel{fig:tb6612fng_plot}{{13b}{25}{Subfigure 13b}{subfigure.196}{}}
+\newlabel{sub@fig:tb6612fng_plot}{{(b)}{b}{Subfigure 13b\relax }{subfigure.196}{}}
+\newlabel{fig:tb6612fng_and_tb6612fng_plot}{{\caption@xref {fig:tb6612fng_and_tb6612fng_plot}{ on input line 32}}{25}{Motor Driver}{subfigure.196}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces \relax }}{25}{figure.caption.194}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {TB6612FNG \blx@tocontentsinit {0}\cite {TB6612FNG_photo}.}}}{25}{subfigure.13.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Target characteristics for TB6612FNG \blx@tocontentsinit {0}\cite {TB6612FNG}.}}}{25}{subfigure.13.2}\protected@file@percent }
+\newlabel{fig:SN74LVC2G14}{{14a}{25}{Subfigure 14a}{subfigure.198}{}}
+\newlabel{sub@fig:SN74LVC2G14}{{(a)}{a}{Subfigure 14a\relax }{subfigure.198}{}}
+\newlabel{fig:schmitt_trigger_hysteresis}{{14b}{25}{Subfigure 14b}{subfigure.199}{}}
+\newlabel{sub@fig:schmitt_trigger_hysteresis}{{(b)}{b}{Subfigure 14b\relax }{subfigure.199}{}}
+\newlabel{fig:SN74LVC2G14_and_schmitt_trigger_hysteresis}{{\caption@xref {fig:SN74LVC2G14_and_schmitt_trigger_hysteresis}{ on input line 47}}{25}{Motor Driver}{subfigure.199}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces \relax }}{25}{figure.caption.197}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {SN74LVC2G14 \blx@tocontentsinit {0}\cite {SN74LVC2G14}.}}}{25}{subfigure.14.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Schmitt trigger output without hysteresis (left) and with hysteresis (right) \blx@tocontentsinit {0}\cite {schmitt_trigger_hysteresis}.}}}{25}{subfigure.14.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.2}Drive Motors}{26}{subsubsection.200}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Similar construction motors were used in this project \blx@tocontentsinit {0}\cite {dc_motor}.}}{26}{figure.caption.201}\protected@file@percent }
+\newlabel{fig:dc-motor}{{15}{26}{Similar construction motors were used in this project \cite {dc_motor}}{figure.caption.201}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Hierarchical Control Strategy}{26}{subsection.202}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Basic PID Structure}{26}{subsection.203}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Discrete Time Implementation}{27}{subsection.205}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Power Supply considerations}{27}{subsubsection.207}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces ELEGOO battery pack with charger.}}{27}{figure.caption.208}\protected@file@percent }
+\newlabel{fig:battery}{{16}{27}{ELEGOO battery pack with charger}{figure.caption.208}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Voltage divider circuit used for in the robot \blx@tocontentsinit {0}\cite {tumbller}.}}{28}{figure.caption.210}\protected@file@percent }
+\newlabel{fig:voltage-divider}{{17}{28}{Voltage divider circuit used for in the robot \cite {tumbller}}{figure.caption.210}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Tuning Methodology}{28}{subsection.227}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Ziegler-Nichols Method}{28}{subsubsection.228}\protected@file@percent }
+\newlabel{eq:eq}{{33}{29}{Ziegler-Nichols Method}{equation.233}{}}
+\newlabel{eq:eq}{{34}{29}{Ziegler-Nichols Method}{equation.234}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Practical Tuning Guidelines}{29}{subsubsection.235}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Pitch PID Control:}{29}{subsection.236}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Pitch angle control system response at $K_{p\theta }$ = 55 and $K_{d\theta }$ = 1.25. The data was recorded at baud rate of 115200.}}{30}{figure.caption.242}\protected@file@percent }
+\newlabel{fig:pid_position_kp_55_kd_1_25}{{18}{30}{Pitch angle control system response at $K_{p\theta }$ = 55 and $K_{d\theta }$ = 1.25. The data was recorded at baud rate of 115200}{figure.caption.242}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Eliminating Jitter}{30}{subsection.243}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Pitch angle control system response at $K_{p\theta }$ = 55 and $K_{d\theta }$ = 0.75. Data recorded at baud rate of 115200.}}{30}{figure.caption.244}\protected@file@percent }
+\newlabel{fig:pid_position_overshoot}{{19}{30}{Pitch angle control system response at $K_{p\theta }$ = 55 and $K_{d\theta }$ = 0.75. Data recorded at baud rate of 115200}{figure.caption.244}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Pitch angle control system response. The data was recorded at baud rate of 115200.}}{31}{figure.caption.252}\protected@file@percent }
+\newlabel{fig:pid_position_combined}{{20}{31}{Pitch angle control system response. The data was recorded at baud rate of 115200}{figure.caption.252}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Yaw Control:}{31}{subsection.253}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Yaw angle control system response at \(K_p\) = 2.5 and $K_i$ = 0.5 for an angle transition from $-20 \ deg$ to $+20 \ deg$. The data was recorded at baud rate of 115200.}}{31}{figure.caption.260}\protected@file@percent }
+\newlabel{fig:pid_yaw}{{21}{31}{Yaw angle control system response at \(K_p\) = 2.5 and $K_i$ = 0.5 for an angle transition from $-20 \ deg$ to $+20 \ deg$. The data was recorded at baud rate of 115200}{figure.caption.260}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Position Control:}{32}{subsection.261}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Position control system response with \(K_{px}\) = 0.26 and $K_{dx}$ = 20 for a displacement of $-20 \ cm$ to $+20 \ cm$. Data recorded at baud rate of 115200.}}{32}{figure.caption.267}\protected@file@percent }
+\newlabel{fig:pid_postition}{{22}{32}{Position control system response with \(K_{px}\) = 0.26 and $K_{dx}$ = 20 for a displacement of $-20 \ cm$ to $+20 \ cm$. Data recorded at baud rate of 115200}{figure.caption.267}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Combining Control Outputs}{32}{subsection.268}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces A simplified diagram of the motor control loop \blx@tocontentsinit {0}\cite {10193276}.}}{33}{figure.caption.280}\protected@file@percent }
+\newlabel{fig:schematics_control-loop}{{23}{33}{A simplified diagram of the motor control loop \cite {10193276}}{figure.caption.280}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.10}Results}{33}{subsection.281}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces The final control system individual output values recorded at baud rate of 115200.}}{34}{figure.caption.282}\protected@file@percent }
+\newlabel{fig:final_pid}{{24}{34}{The final control system individual output values recorded at baud rate of 115200}{figure.caption.282}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces A simplified block diagram of the cascaded control loop used. }}{35}{figure.caption.283}\protected@file@percent }
+\newlabel{fig:control-loop-2}{{25}{35}{A simplified block diagram of the cascaded control loop used}{figure.caption.283}{}}
+\@setckpt{motor_control}{
+\setcounter{page}{36}
+\setcounter{equation}{39}
+\setcounter{enumi}{4}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{section}{4}
+\setcounter{subsection}{10}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{25}
+\setcounter{table}{0}
+\setcounter{float@type}{16}
+\setcounter{nprt@mantissa@digitsbefore}{0}
+\setcounter{nprt@mantissa@digitsafter}{0}
+\setcounter{nprt@exponent@digitsbefore}{0}
+\setcounter{nprt@exponent@digitsafter}{0}
+\setcounter{nprt@digitsfirstblock}{0}
+\setcounter{nprt@blockcnt}{0}
+\setcounter{nprt@cntprint}{0}
+\setcounter{LT@tables}{0}
+\setcounter{LT@chunks}{0}
+\setcounter{r@tfl@t}{0}
+\setcounter{parentequation}{0}
+\setcounter{lstnumber}{9}
+\setcounter{AM@survey}{0}
+\setcounter{tcbbreakpart}{0}
+\setcounter{tcblayer}{0}
+\setcounter{tcolorbox@number}{0}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{KVtest}{0}
+\setcounter{subfigure}{0}
+\setcounter{subfigure@save}{2}
+\setcounter{lofdepth}{1}
+\setcounter{subtable}{0}
+\setcounter{subtable@save}{0}
+\setcounter{lotdepth}{1}
+\setcounter{tabx@nest}{0}
+\setcounter{listtotal}{0}
+\setcounter{listcount}{0}
+\setcounter{liststart}{0}
+\setcounter{liststop}{0}
+\setcounter{citecount}{0}
+\setcounter{citetotal}{0}
+\setcounter{multicitecount}{0}
+\setcounter{multicitetotal}{0}
+\setcounter{instcount}{59}
+\setcounter{maxnames}{2}
+\setcounter{minnames}{1}
+\setcounter{maxitems}{3}
+\setcounter{minitems}{1}
+\setcounter{citecounter}{0}
+\setcounter{maxcitecounter}{0}
+\setcounter{savedcitecounter}{0}
+\setcounter{uniquelist}{0}
+\setcounter{uniquename}{0}
+\setcounter{refsection}{0}
+\setcounter{refsegment}{0}
+\setcounter{maxextratitle}{0}
+\setcounter{maxextratitleyear}{0}
+\setcounter{maxextraname}{0}
+\setcounter{maxextradate}{0}
+\setcounter{maxextraalpha}{0}
+\setcounter{abbrvpenalty}{50}
+\setcounter{highnamepenalty}{50}
+\setcounter{lownamepenalty}{25}
+\setcounter{maxparens}{3}
+\setcounter{parenlevel}{0}
+\setcounter{blx@maxsection}{0}
+\setcounter{mincomprange}{10}
+\setcounter{maxcomprange}{100000}
+\setcounter{mincompwidth}{1}
+\setcounter{afterword}{0}
+\setcounter{savedafterword}{0}
+\setcounter{annotator}{0}
+\setcounter{savedannotator}{0}
+\setcounter{author}{0}
+\setcounter{savedauthor}{0}
+\setcounter{bookauthor}{0}
+\setcounter{savedbookauthor}{0}
+\setcounter{commentator}{0}
+\setcounter{savedcommentator}{0}
+\setcounter{editor}{0}
+\setcounter{savededitor}{0}
+\setcounter{editora}{0}
+\setcounter{savededitora}{0}
+\setcounter{editorb}{0}
+\setcounter{savededitorb}{0}
+\setcounter{editorc}{0}
+\setcounter{savededitorc}{0}
+\setcounter{foreword}{0}
+\setcounter{savedforeword}{0}
+\setcounter{holder}{0}
+\setcounter{savedholder}{0}
+\setcounter{introduction}{0}
+\setcounter{savedintroduction}{0}
+\setcounter{namea}{0}
+\setcounter{savednamea}{0}
+\setcounter{nameb}{0}
+\setcounter{savednameb}{0}
+\setcounter{namec}{0}
+\setcounter{savednamec}{0}
+\setcounter{translator}{0}
+\setcounter{savedtranslator}{0}
+\setcounter{shortauthor}{0}
+\setcounter{savedshortauthor}{0}
+\setcounter{shorteditor}{0}
+\setcounter{savedshorteditor}{0}
+\setcounter{labelname}{0}
+\setcounter{savedlabelname}{0}
+\setcounter{institution}{0}
+\setcounter{savedinstitution}{0}
+\setcounter{lista}{0}
+\setcounter{savedlista}{0}
+\setcounter{listb}{0}
+\setcounter{savedlistb}{0}
+\setcounter{listc}{0}
+\setcounter{savedlistc}{0}
+\setcounter{listd}{0}
+\setcounter{savedlistd}{0}
+\setcounter{liste}{0}
+\setcounter{savedliste}{0}
+\setcounter{listf}{0}
+\setcounter{savedlistf}{0}
+\setcounter{location}{0}
+\setcounter{savedlocation}{0}
+\setcounter{organization}{0}
+\setcounter{savedorganization}{0}
+\setcounter{origlocation}{0}
+\setcounter{savedoriglocation}{0}
+\setcounter{origpublisher}{0}
+\setcounter{savedorigpublisher}{0}
+\setcounter{publisher}{0}
+\setcounter{savedpublisher}{0}
+\setcounter{language}{0}
+\setcounter{savedlanguage}{0}
+\setcounter{origlanguage}{0}
+\setcounter{savedoriglanguage}{0}
+\setcounter{pageref}{0}
+\setcounter{savedpageref}{0}
+\setcounter{textcitecount}{0}
+\setcounter{textcitetotal}{0}
+\setcounter{textcitemaxnames}{0}
+\setcounter{biburlbigbreakpenalty}{100}
+\setcounter{biburlbreakpenalty}{200}
+\setcounter{biburlnumpenalty}{0}
+\setcounter{biburlucpenalty}{0}
+\setcounter{biburllcpenalty}{0}
+\setcounter{smartand}{1}
+\setcounter{bbx:relatedcount}{0}
+\setcounter{bbx:relatedtotal}{0}
+\setcounter{section@level}{2}
+\setcounter{Item}{4}
+\setcounter{Hfootnote}{0}
+\setcounter{bookmark@seq@number}{0}
+\setcounter{@todonotes@numberoftodonotes}{0}
+\setcounter{@pps}{0}
+\setcounter{@ppsavesec}{0}
+\setcounter{@ppsaveapp}{0}
+\setcounter{lstlisting}{0}
+}

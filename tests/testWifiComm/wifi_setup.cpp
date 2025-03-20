@@ -12,7 +12,6 @@ char ssid[64] = "realme 9 Pro+";
 char pass[64] = "muhammad";
 char serverIP[16] = "192.168.136.177";
 uint16_t serverPort = 12345;
-const uint16_t SERVER_PORT = 12345;
 
 WiFiClient client;
 WiFiServer server(SERVER_PORT);  // Create a server that listens on port 80
