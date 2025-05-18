@@ -23,8 +23,6 @@ void telemetryPacket::sendI2CBytes() const {
   DEBUG_PRINT(DEBUG_COMM, "Sent I2C: " + String(robotYawDegrees) + "," + String(robotDistanceCm) + "," + String(ultrasonicDistanceCm));
 }
 
-#include <Wire.h>
-
 void telemetryPacket::sendI2CASCII() const {
   char buffer[BUFFER_SIZE];
   int snprintfResult = snprintf(buffer, BUFFER_SIZE, "%hd,%ld,%hd", 
@@ -51,9 +49,24 @@ void telemetryPacket::sendUartBytes(Stream& serial) const {
 
 void telemetryPacket::sendUartASCII(Stream& serial) const {
   char buffer[BUFFER_SIZE];
-  snprintf(buffer, BUFFER_SIZE, "%hd,%ld,%hd\n", robotYawDegrees, robotDistanceCm, ultrasonicDistanceCm);
+  snprintf(buffer, BUFFER_SIZE, "%hd,%ld,%hhu,%d,%d,%ld,%ld",
+           robotYawDegrees,
+           robotDistanceCm,
+           ultrasonicDistanceCm,
+           leftIR_Detected,
+           rightIR_Detected,
+           leftMotorEncoderValue,
+           rightMotorEncoderValue);
+
   serial.println(buffer);
-  DEBUG_PRINT(DEBUG_COMM, "Sent Uart: " + String(robotYawDegrees) + "," + String(robotDistanceCm) + "," + String(ultrasonicDistanceCm));
+
+  DEBUG_PRINT(DEBUG_COMM, "Sent Uart: " + String(robotYawDegrees) + "," +
+                                       String(robotDistanceCm) + "," +
+                                       String(ultrasonicDistanceCm) + "," +
+                                       String(leftIR_Detected) + "," +
+                                       String(rightIR_Detected) + "," +
+                                       String(leftMotorEncoderValue) + "," +
+                                       String(rightMotorEncoderValue));
 }
 
 void telemetryPacket::readI2CBytes(uint8_t address) {
@@ -89,9 +102,24 @@ void telemetryPacket::readUartBytes(Stream& serial) {
 
 void telemetryPacket::readUartASCII(Stream& serial) {
   String input = serial.readStringUntil('\n');
-  sscanf(input.c_str(), "%hd,%ld,%hd", &robotYawDegrees, &robotDistanceCm, &ultrasonicDistanceCm);
+  sscanf(input.c_str(), "%hd,%ld,%hhu,%d,%d,%hd,%hd",
+         &robotYawDegrees,
+         &robotDistanceCm,
+         &ultrasonicDistanceCm,
+         (int*)&leftIR_Detected,
+         (int*)&rightIR_Detected,
+         &leftMotorEncoderValue,
+         &rightMotorEncoderValue);
+
   DEBUG_PRINT(DEBUG_COMM, "Recv Raw: " + input);
-  DEBUG_PRINT(DEBUG_COMM, "Recv Uart: " + String(robotYawDegrees) + "," + String(robotDistanceCm) + "," + String(ultrasonicDistanceCm));
+  DEBUG_PRINT(DEBUG_COMM, "Recv Uart: " +
+              String(robotYawDegrees) + "," +
+              String(robotDistanceCm) + "," +
+              String(ultrasonicDistanceCm) + "," +
+              String(leftIR_Detected) + "," +
+              String(rightIR_Detected) + "," +
+              String(leftMotorEncoderValue) + "," +
+              String(rightMotorEncoderValue));
 }
 
 void commandPacket::sendI2CBytes(uint8_t address) const {
@@ -127,7 +155,7 @@ void commandPacket::sendUartASCII(Stream& serial) const {
 
 void commandPacket::readI2CBytes(uint8_t numBytes) {
   if (numBytes < 1) {
-    DEBUG_PRINT(DEBUG_COMM, "Error: No data received.");
+    ERROR_PRINT("Error: No data received.");
     return;
   }
 

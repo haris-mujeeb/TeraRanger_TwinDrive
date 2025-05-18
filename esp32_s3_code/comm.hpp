@@ -3,14 +3,13 @@
 #ifndef TELEMETRY_COMMAND_HPP
 #define TELEMETRY_COMMAND_HPP
 
-// #include "avr/pgmspace.h"
 #include <stdint.h>
 #include "Arduino.h"
 #include <Wire.h>
 #include "debugConfig.h"
 
 #define SLAVE_ADDR 8
-#define BUFFER_SIZE 32
+#define BUFFER_SIZE 64
 
 /**
  * @brief Checks if the given string represents a numeric value.
@@ -53,6 +52,11 @@ struct telemetryPacket {
   int16_t robotYawDegrees = 0;      ///< Robot Yaw angle in degrees.
   long robotDistanceCm = 0.0;       ///< Robot distance measurement in centimeters.
   uint8_t ultrasonicDistanceCm = 0; ///< Ultrasonic distance measurement in centimeters.
+  bool leftIR_Detected = 0;
+  bool rightIR_Detected = 0;
+  int32_t leftMotorEncoderValue = 0;      ///< Robot Yaw angle in degrees.
+  int32_t rightMotorEncoderValue = 0;      ///< Robot Yaw angle in degrees.
+
   /**
    * @brief Sends telemetry data as raw bytes over I2C.
    */

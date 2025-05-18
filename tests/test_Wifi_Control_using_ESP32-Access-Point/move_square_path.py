@@ -15,14 +15,14 @@ if __name__ == "__main__":
   # Define the square movement pattern
   time.sleep(5)  # Wait for first data to be recieved
   commands = [
-    f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
-    f"TURN,90,10",  # Turn 90 degrees right
-    f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
-    f"TURN,180,10",  # Turn 90 degrees right
-    f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
-    f"TURN,270,10",  # Turn 90 degrees right
-    f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
-    f"TURN,360,10"   # Turn 90 degrees right (back to start orientation)
+    # f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
+    # f"TURN,90,10",  # Turn 90 degrees right
+    # f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
+    # f"TURN,180,10",  # Turn 90 degrees right
+    # f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
+    # f"TURN,270,10",  # Turn 90 degrees right
+    # f"MOVE,{robot.robot_sensor_values[1] + 50},10",  # Move forward
+    # f"TURN,360,10"   # Turn 90 degrees right (back to start orientation)
   ]
 
   try:

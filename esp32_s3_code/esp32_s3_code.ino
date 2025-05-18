@@ -30,15 +30,18 @@ void forwardSensorData();
 void setup() {
     Serial.begin(115200);
     sensorSerial.begin(115200, SERIAL_8N1, 18, 17);  // RX, TX for sensor
-    robotSerial.begin(9600, SERIAL_8N1, 16, 15);     // RX, TX for robot
+    robotSerial.begin(115200, SERIAL_8N1, 16, 15);     // RX, TX for robot
 
     setupWiFi();
 }
 
 void loop() {
-    forwardSensorData();
+    sendToFData();
+    delay(10); // Adjust loop frequency as needed
+    sendRobotData();
+    delay(10); // Adjust loop frequency as needed
     handleClientRequests();
-    delay(1); // Adjust loop frequency as needed
+    delay(10); // Adjust loop frequency as needed
 }
 
 // Initialize ESP32 as an Access Point
@@ -121,17 +124,23 @@ void processCommand(const String& commandStr) {
 }
 
 // Read sensor data and send to PC
-void forwardSensorData() {  
-    if (sensorSerial.available()) {
-        String tofData = sensorSerial.readStringUntil('\n');
-        teleData.readUartASCII(robotSerial);
+void sendToFData() {  
+  if (sensorSerial.available()) {
+      String tofData = sensorSerial.readStringUntil('\n');
+      String data = tofData + "\n";
+      sendDataToPC(data);
+      DEBUG_PRINT(DEBUG_COMM, "ToF Data Sent: " + data);
+  }
+}
 
-        String data = String(teleData.robotYawDegrees) + "," +
-                      String(teleData.robotDistanceCm) + "," +
-                      String(teleData.ultrasonicDistanceCm) + "\t" +
-                      tofData + "\n";
-
-        sendDataToPC(data);
-        DEBUG_PRINT(DEBUG_COMM, "Sensor Data Sent: " + data);
-    }
+// Read sensor data and send to PC
+void sendRobotData() {  
+  if (robotSerial.available()) {
+    teleData.readUartASCII(robotSerial);
+    String data = String(teleData.robotYawDegrees) + "," +
+                  String(teleData.robotDistanceCm) + "," +
+                  String(teleData.ultrasonicDistanceCm) + "\n";
+    sendDataToPC(data);
+    DEBUG_PRINT(DEBUG_COMM, "Robot Data Sent: " + data);
+  }
 }
