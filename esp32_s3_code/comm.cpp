@@ -102,7 +102,7 @@ void telemetryPacket::readUartBytes(Stream& serial) {
 
 void telemetryPacket::readUartASCII(Stream& serial) {
   String input = serial.readStringUntil('\n');
-  sscanf(input.c_str(), "%hd,%ld,%hhu,%d,%d,%hd,%hd",
+  sscanf(input.c_str(), "%hd,%ld,%hhu,%d,%d,%ld,%ld",
          &robotYawDegrees,
          &robotDistanceCm,
          &ultrasonicDistanceCm,

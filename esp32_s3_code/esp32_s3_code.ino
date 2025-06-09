@@ -126,8 +126,7 @@ void processCommand(const String& commandStr) {
 // Read sensor data and send to PC
 void sendToFData() {  
   if (sensorSerial.available()) {
-      String tofData = sensorSerial.readStringUntil('\n');
-      String data = tofData + "\n";
+      String data = sensorSerial.readStringUntil('\n') + "\n";
       sendDataToPC(data);
       DEBUG_PRINT(DEBUG_COMM, "ToF Data Sent: " + data);
   }
@@ -136,11 +135,8 @@ void sendToFData() {
 // Read sensor data and send to PC
 void sendRobotData() {  
   if (robotSerial.available()) {
-    teleData.readUartASCII(robotSerial);
-    String data = String(teleData.robotYawDegrees) + "," +
-                  String(teleData.robotDistanceCm) + "," +
-                  String(teleData.ultrasonicDistanceCm) + "\n";
-    sendDataToPC(data);
+    String data = "RB\t"+ robotSerial.readStringUntil('\n');
+    sendDataToPC(data + "\n");
     DEBUG_PRINT(DEBUG_COMM, "Robot Data Sent: " + data);
   }
 }

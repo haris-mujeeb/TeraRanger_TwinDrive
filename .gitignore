@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/esp32_s3_code/.theia
+
+
+/LaTex_Files/
+/tests/archive/
