@@ -6,6 +6,10 @@ This project features a two-wheeled, self-balancing robot capable of autonomous 
 
 \<img src="[https://github.com/user-attachments/assets/679be388-7260-4449-b8b9-67d9719837](https://www.google.com/search?q=https://github.com/user-attachments/assets/679be388-7260-4449-b8b9-67d9719837)" alt="RobotFinalAssembly1" height="500"\>
 
+## Demo
+
+https://github.com/user-attachments/assets/0ca18e00-be7d-4444-9bbe-24fa2c01fbb0
+
 ## ✨ Key Features
 
   * [cite\_start]**Dynamic Self-Balancing**: Implements a robust **Multi-rate PID control** algorithm to ensure stable balancing and precise locomotion[cite: 22]. [cite\_start]The pitch control loop uses an **Adaptive Derivative Gain** to achieve high stability while eliminating jitter[cite: 758, 765].
