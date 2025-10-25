@@ -69,13 +69,14 @@ void loop() {
     handleUdpCommands();
 
     // Read sensor data and attempt to send every 10ms
-    forwardSensorData();
+    forwardSensorData();    
 }
 
 // Initialize ESP32 as an Access Point and start UDP listener
 void setupWiFi() {
     WiFi.softAPConfig(localIP, gateway, subnet); // Set static IP for AP
     WiFi.softAP(SSID, PASSWORD);
+
     DEBUG_PRINT(DEBUG_COMM, "Access Point started");
     DEBUG_PRINT(DEBUG_COMM, "ESP32 IP Address: " + WiFi.softAPIP().toString());
 
@@ -143,40 +144,28 @@ void processCommand(const String& commandStr) {
 }
 
 // Read sensor data and prepare to send to PC via UDP
+char lastTofData[128] = {0};
+char lastRobotData[128] = {0};
+char combinedData[256] = {0};
+
 void forwardSensorData() {
-    static String lastTofData = "";
-    static String lastRobotData = "";
-    
-    if (sensorSerial.available()) {
-        lastTofData = sensorSerial.readStringUntil('\n');
-        DEBUG_PRINT(DEBUG_COMM, "Rec ToF: " + lastTofData);
-    }
-
     if (robotSerial.available()) {
-        lastRobotData = "RB\t" + robotSerial.readStringUntil('\n');
-        DEBUG_PRINT(DEBUG_COMM, "Rec Robot: " + lastRobotData);
+        int len = robotSerial.readBytesUntil('\n', lastRobotData, sizeof(lastRobotData) - 1);
+        lastRobotData[len] = '\0';
     }
 
-    // teleData.readUartASCII(robotSerial);
+    if (sensorSerial.available()) {
+        int len = sensorSerial.readBytesUntil('\n', lastTofData, sizeof(lastTofData) - 1);
+        lastTofData[len] = '\0';
 
+        if (pythonClientIP != IPAddress(0, 0, 0, 0)) {
+            snprintf(combinedData, sizeof(combinedData), "%s\nRB\t%s", lastTofData, lastRobotData);
 
-    // Only send data if enough time has passed and we know the Python client's IP
-    unsigned long currentMillis = millis();
-    if (currentMillis - previousMillis >= interval) {
-        previousMillis = currentMillis;
-        if (pythonClientIP != IPAddress(0, 0, 0, 0)) { // Only send if Python client IP is known
-            String combinedData = lastTofData + "\n" + lastRobotData;
-
-            // Send telemetry data
             Udp.beginPacket(pythonClientIP, PYTHON_LISTEN_PORT);
-            Udp.print(combinedData); // Use Udp.print() for String
+            Udp.write((const uint8_t*)combinedData, strlen(combinedData));
             Udp.endPacket();
 
             DEBUG_PRINT(DEBUG_COMM, combinedData);
-            // Commented out verbose debug print to avoid flooding serial at 10ms interval
-        } else {
-            DEBUG_PRINT(DEBUG_COMM, "Waiting for Python client to send first command...");
-            // Commented out verbose debug print
         }
     }
 }

@@ -35,7 +35,7 @@ void loop() {
 }
 
 void readSerialData() {
-  `hile (Serial.available() > 0) {
+  while (Serial.available() > 0) {
     Serial.print(1);
     char rc = Serial.read();
     if (rc == '\r' || rc == '\n') {

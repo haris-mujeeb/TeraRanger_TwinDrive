@@ -2,7 +2,7 @@ from robot_interface import RobotInterface
 import time
 
 robot = RobotInterface("COM11", 9600)
-# robot.set_logging(True) # enable logging
+robot.set_logging(True) # enable logging
 robot.start_reading()
 
 try:
