@@ -1,6 +1,6 @@
-# Autonomous Maze Solving Robot with SLAM 🤖
+# Autonomous Maze Solving Robot 🤖
 
-This project features a two-wheeled, self-balancing robot capable of autonomous navigation and maze solving. It uses a host-PC-based **Simultaneous Localization and Mapping (SLAM)** algorithm to build a 2D map of its environment in real-time.
+This project features a two-wheeled, self-balancing robot capable of autonomous navigation and maze solving. It uses a host-PC-based algorithm to build a 2D map of its environment in real-time.
 
 The robot's hardware is a custom-designed, differential-drive platform based on an **Arduino Nano** for real-time balancing control and an **ESP32-S3** as a central communication hub. It uses a **TeraRanger Multiflex** Time-of-Flight (ToF) sensor array for 2D environmental mapping.
 
@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/0ca18e00-be7d-4444-9bbe-24fa2c01fbb0
 
   * **Dynamic Self-Balancing**: Implements a robust **Multi-rate PID control** algorithm to ensure stable balancing and precise locomotion. The pitch control loop uses an **Adaptive Derivative Gain** to achieve high stability while eliminating jitter.
   * **Advanced Sensor Fusion**: Utilizes an **Extended Kalman Filter (EKF)** for accurate state estimation. It fuses data from the **MPU-6050** IMU (attitude) and **Hall-effect motor encoders** (odometry) to get a reliable estimate of the robot's pitch angle and position.
-  * **Real-time SLAM**: The host PC application integrates robot odometry with the **TeraRanger Multiflex** ToF sensor readings to perform SLAM, building a 2D point cloud map of the environment on the fly.
+  * **Real-time 2D Mapping**: The host PC application integrates robot odometry with the **TeraRanger Multiflex** ToF sensor readings, building a 2D point cloud map of the environment on the fly.
   * **Live Data Visualization**: A custom **PyQtGraph** application provides a rich, interactive 2D plot displaying the robot's estimated position, historical path, and the mapped environmental points.
   * **Wi-Fi Communication Hub**: The ESP32-S3 acts as a **Soft Access Point (SoftAP)**, creating its own Wi-Fi network. It streams sensor telemetry and receives control commands over a low-latency **TCP socket** connection.
   * **Autonomous & Manual Control**: The robot can be driven manually via keyboard commands or operate autonomously, using the generated map and a **wall-following algorithm** to solve mazes.
@@ -37,7 +37,7 @@ The system is split into two main parts: the on-board embedded controllers and t
 
 ### 2\. Host PC Application (Python)
 
-  * **Logic**: **Python** for the main application, SLAM algorithms, and maze-solving logic.
+  * **Logic**: **Python** for the main application, mapping algorithms, and maze-solving logic.
   * **GUI**: **PyQt5** for the application window and user controls.
   * **Visualization**: **PyQtGraph** for high-performance, real-time 2D plotting of the map and robot state.
   * **Data Processing**: **NumPy** for efficient numerical operations.
@@ -61,7 +61,7 @@ The system is split into two main parts: the on-board embedded controllers and t
 ├── .gitignore
 ├── LICENSE
 ├── logger_config.py         # Logging configuration
-├── main.py                  # Main Python application entry point (SLAM & Visualization)
+├── main.py                  # Main Python application entry point (Visualization)
 ├── mazeSolver.py            # Autonomous maze solving logic
 ├── README.md                # This file
 ├── requirements.txt         # Python dependencies
@@ -134,7 +134,7 @@ SEND_PORT = 12345         # ROBOT'S PORT: Port for sending commands (via TCP)
     python main.py
     ```
 4.  **Control the robot:**
-      * The PyQtGraph application will launch, showing the live SLAM visualization.
+      * The PyQtGraph application will launch, showing the live visualization.
       * Use the following keyboard commands for manual control:
           * **W**: Move forward
           * **S**: Move backward
