@@ -6,12 +6,19 @@ The robot's hardware is a custom-designed, differential-drive platform based on 
 
 <img src="https://github.com/user-attachments/assets/679be388-7260-4449-b8b9-67d971989837" alt="RobotFinalAssembly1" height="500">
 
-## Demo
+-----
 
+## Demo
 https://github.com/user-attachments/assets/0ca18e00-be7d-4444-9bbe-24fa2c01fbb0
 
-## ✨ Key Features
+-----
 
+## System Architecture
+<img width="1052" height="668" alt="image" src="https://github.com/user-attachments/assets/fe66a67f-7761-4866-bcbd-da07bdd15d10" />
+
+-----
+
+## ✨ Key Features
   * **Dynamic Self-Balancing**: Implements a robust **Multi-rate PID control** algorithm to ensure stable balancing and precise locomotion. The pitch control loop uses an **Adaptive Derivative Gain** to achieve high stability while eliminating jitter.
   * **Advanced Sensor Fusion**: Utilizes an **Extended Kalman Filter (EKF)** for accurate state estimation. It fuses data from the **MPU-6050** IMU (attitude) and **Hall-effect motor encoders** (odometry) to get a reliable estimate of the robot's pitch angle and position.
   * **Real-time 2D Mapping**: The host PC application integrates robot odometry with the **TeraRanger Multiflex** ToF sensor readings, building a 2D point cloud map of the environment on the fly.
@@ -41,12 +48,6 @@ The system is split into two main parts: the on-board embedded controllers and t
   * **GUI**: **PyQt5** for the application window and user controls.
   * **Visualization**: **PyQtGraph** for high-performance, real-time 2D plotting of the map and robot state.
   * **Data Processing**: **NumPy** for efficient numerical operations.
-
------
-
-## 🎥 Demo
-
-[Link to Demo Video](https://github.com/user-attachments/assets/0ca18e00-be7d-4444-9bbe-24fa2c01fbb0)
 
 -----
 
